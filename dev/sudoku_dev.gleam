@@ -1,50 +1,12 @@
 import gleam/erlang/process
 import gleam/int
-import gleam/io
+import gleam/option.{Some}
+import shore
+import shore/key
+import shore/layout
+import shore/style
+import shore/ui
 import sudoku
-
-const esc = "\u{001b}["
-
-fn home() {
-  io.print(esc <> "H")
-}
-
-fn clear_screen() {
-  io.print(esc <> "2J")
-}
-
-fn clear_line() {
-  io.print(esc <> "2K")
-}
-
-fn clear_below() {
-  io.print(esc <> "J")
-}
-
-fn hide_cursor() {
-  io.print(esc <> "?25l")
-}
-
-fn show_cursor() {
-  io.print(esc <> "?25h")
-}
-
-fn wrap_off() {
-  io.print(esc <> "?7l")
-}
-
-fn wrap_on() {
-  io.print(esc <> "?7h")
-}
-
-fn alt_on() {
-  io.print(esc <> "?1049h")
-}
-
-// optional, nicer UX
-fn alt_off() {
-  io.print(esc <> "?1049l")
-}
 
 fn easy(i: String) {
   sudoku.from_pattern("
@@ -60,34 +22,69 @@ fn easy(i: String) {
   // i should be 0
 }
 
-fn draw_frame(i: Int) {
+pub fn main() {
   let board =
-    i
+    0
     |> int.to_string
     |> easy
     |> sudoku.sudoku_to_string
 
-  home()
-  wrap_off()
-
-  clear_line()
-  io.print("\r")
-  io.print(board)
-  clear_below()
-  wrap_on()
-
-  process.sleep(1000)
-  draw_frame({ i + 1 } % 9)
+  let exit = process.new_subject()
+  let assert Ok(_actor) =
+    shore.spec(
+      init:,
+      update:,
+      view:,
+      exit:,
+      keybinds: shore.default_keybinds(),
+      redraw: shore.on_timer(16),
+    )
+    |> shore.start
+  exit |> process.receive_forever
 }
 
-pub fn main() {
-  alt_on()
-  hide_cursor()
-  clear_screen()
-  home()
+type Model {
+  Model(counter: Int)
+}
 
-  draw_frame(0)
+fn init() -> #(Model, List(fn() -> Msg)) {
+  let model = Model(counter: 0)
+  let cmds = []
+  #(model, cmds)
+}
 
-  show_cursor()
-  alt_off()
+type Msg {
+  Increment
+  Decrement
+}
+
+fn update(model: Model, msg: Msg) -> #(Model, List(fn() -> Msg)) {
+  case msg {
+    Increment -> #(Model(counter: model.counter + 1), [])
+    Decrement -> #(Model(counter: model.counter - 1), [])
+  }
+}
+
+fn view(model: Model) -> shore.Node(Msg) {
+  ui.box(
+    [
+      ui.text(
+        "keybinds
+
+i: increments
+d: decrements
+ctrl+x: exits
+      ",
+      ),
+      ui.text(int.to_string(model.counter)),
+      ui.br(),
+      ui.row([
+        ui.button("increment", key.Char("i"), Increment),
+        ui.button("decrement", key.Char("d"), Decrement),
+      ]),
+    ],
+    Some("counter"),
+  )
+  |> ui.align(style.Center, _)
+  |> layout.center(style.Px(50), style.Px(12))
 }
