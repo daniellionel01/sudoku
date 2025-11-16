@@ -1,0 +1,26 @@
+---
+version: 1.4.1
+title: get possible values for a couple of cells in the first easy sudoku
+file: ./test/sudoku_test.gleam
+test_name: get_possible_values_test
+---
+sudoku:
+┌───────┬───────┬───────┐
+│ . . 3 │ . 2 . │ 6 . . │
+│ 9 . . │ 3 . 5 │ . . 1 │
+│ . . 1 │ 8 . 6 │ 4 . . │
+├───────┼───────┼───────┤
+│ . . 8 │ 1 . 2 │ 9 . . │
+│ 7 . . │ . . . │ . . 8 │
+│ . . 6 │ 7 . 8 │ 2 . . │
+├───────┼───────┼───────┤
+│ . . 2 │ 6 . 9 │ 5 . . │
+│ 8 . . │ 2 . 3 │ . . 9 │
+│ . . 5 │ . 1 . │ 3 . . │
+└───────┴───────┴───────┘
+
+values #(row | col)
+values #(0   | 0  ): 4, 5
+values #(5   | 0  ): 1, 4, 7
+values #(4   | 4  ): 3, 4, 5, 6, 9
+values #(2   | 0  ): 3

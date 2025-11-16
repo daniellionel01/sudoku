@@ -5,8 +5,44 @@ import gleam/result
 import gleam/string
 import iv
 
-pub fn solve(sudoku: Sudoku) -> Result(Sudoku, Nil) {
+pub fn solve(sudoku: Sudoku) -> Result(Sudoku, Sudoku) {
   todo
+}
+
+pub fn do_solve(sudoku: Sudoku) -> Result(Sudoku, Sudoku) {
+  todo
+}
+
+/// Position on a sudoku grid starting at #(0, 0).
+pub type Position {
+  Position(col: Int, row: Int)
+}
+
+pub fn possible_values(sudoku: Sudoku, at: Position) -> iv.Array(Int) {
+  let index = at.row * 9 + at.col
+  case iv.get(sudoku.cells, index) {
+    Error(_) -> panic as "out of bounds"
+    Ok(d) if d != 0 -> iv.from_list([d])
+    Ok(_) -> {
+      let box_row = at.row / 3
+      let box_col = at.col / 3
+      let box_index = box_row * 3 + box_col
+
+      let box = get_box(sudoku, box_index)
+      let row = get_row(sudoku, at.row)
+      let col = get_col(sudoku, at.col)
+
+      let taken =
+        iv.new()
+        |> iv.concat(box)
+        |> iv.concat(row)
+        |> iv.concat(col)
+        |> iv.filter(fn(n) { n != 0 })
+
+      iv.from_list([1, 2, 3, 4, 5, 6, 7, 8, 9])
+      |> iv.filter(fn(n) { !iv.contains(taken, n) })
+    }
+  }
 }
 
 pub fn is_solved(sudoku: Sudoku) -> Bool {

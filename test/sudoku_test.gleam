@@ -11,6 +11,34 @@ pub fn main() -> Nil {
   gleeunit.main()
 }
 
+pub fn get_possible_values_test() {
+  let easy_patterns = patterns.easy()
+  let assert Ok(easy) = list.first(easy_patterns)
+
+  let possible1 = sudoku.possible_values(easy, sudoku.Position(0, 0))
+  let possible2 = sudoku.possible_values(easy, sudoku.Position(5, 0))
+  let possible3 = sudoku.possible_values(easy, sudoku.Position(4, 4))
+  let possible4 = sudoku.possible_values(easy, sudoku.Position(2, 0))
+
+  let text =
+    "sudoku:\n"
+    <> sudoku.to_string(easy)
+    <> "\n\nvalues #(row | col)"
+    <> "\nvalues #(0   | 0  ): "
+    <> string.join(list.map(iv.to_list(possible1), int.to_string), ", ")
+    <> "\nvalues #(5   | 0  ): "
+    <> string.join(list.map(iv.to_list(possible2), int.to_string), ", ")
+    <> "\nvalues #(4   | 4  ): "
+    <> string.join(list.map(iv.to_list(possible3), int.to_string), ", ")
+    <> "\nvalues #(2   | 0  ): "
+    <> string.join(list.map(iv.to_list(possible4), int.to_string), ", ")
+
+  birdie.snap(
+    text,
+    title: "get possible values for a couple of cells in the first easy sudoku",
+  )
+}
+
 pub fn parse_easy_sudoku_test() {
   let easy_patterns = patterns.easy()
   let assert Ok(easy) = list.first(easy_patterns)
