@@ -44,6 +44,21 @@ pub fn get_box(sudoku: Sudoku, n: Int) -> iv.Array(Int) {
   |> iv.concat(row3)
 }
 
+/// Starts at 0.
+pub fn get_row(sudoku: Sudoku, row: Int) -> iv.Array(Int) {
+  let assert Ok(row1) = iv.slice(sudoku.cells, start: row * 9, size: 9)
+  row1
+}
+
+/// Starts at 0.
+pub fn get_col(sudoku: Sudoku, col: Int) -> iv.Array(Int) {
+  iv.range(0, 8)
+  |> iv.map(fn(i) {
+    let assert Ok(el) = iv.get(sudoku.cells, col + i * 9)
+    el
+  })
+}
+
 pub opaque type Sudoku {
   Sudoku(cells: iv.Array(Int))
 }

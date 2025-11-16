@@ -27,6 +27,87 @@ pub fn parse_hard_sudoku_test() {
   |> birdie.snap(title: "the first hard sudoku is parsed successfully")
 }
 
+pub fn get_rows_test() {
+  let hard_patterns = patterns.hard()
+  let assert Ok(hard) = list.first(hard_patterns)
+
+  let row1 = sudoku.get_row(hard, 0)
+  let row2 = sudoku.get_row(hard, 1)
+  let row3 = sudoku.get_row(hard, 2)
+  let row4 = sudoku.get_row(hard, 3)
+  let row5 = sudoku.get_row(hard, 4)
+  let row6 = sudoku.get_row(hard, 5)
+  let row7 = sudoku.get_row(hard, 6)
+  let row8 = sudoku.get_row(hard, 7)
+  let row9 = sudoku.get_row(hard, 8)
+
+  let text =
+    "sudoku:\n"
+    <> sudoku.to_string(hard)
+    <> "\nrow 1: "
+    <> string.join(list.map(iv.to_list(row1), int.to_string), ", ")
+    <> "\nrow 2: "
+    <> string.join(list.map(iv.to_list(row2), int.to_string), ", ")
+    <> "\nrow 3: "
+    <> string.join(list.map(iv.to_list(row3), int.to_string), ", ")
+    <> "\nrow 4: "
+    <> string.join(list.map(iv.to_list(row4), int.to_string), ", ")
+    <> "\nrow 5: "
+    <> string.join(list.map(iv.to_list(row5), int.to_string), ", ")
+    <> "\nrow 6: "
+    <> string.join(list.map(iv.to_list(row6), int.to_string), ", ")
+    <> "\nrow 7: "
+    <> string.join(list.map(iv.to_list(row7), int.to_string), ", ")
+    <> "\nrow 8: "
+    <> string.join(list.map(iv.to_list(row8), int.to_string), ", ")
+    <> "\nrow 9: "
+    <> string.join(list.map(iv.to_list(row9), int.to_string), ", ")
+
+  birdie.snap(text, title: "rows from first hard test are correctly extracted")
+}
+
+pub fn get_columns_test() {
+  let hard_patterns = patterns.hard()
+  let assert Ok(hard) = list.first(hard_patterns)
+
+  let col1 = sudoku.get_col(hard, 0)
+  let col2 = sudoku.get_col(hard, 1)
+  let col3 = sudoku.get_col(hard, 2)
+  let col4 = sudoku.get_col(hard, 3)
+  let col5 = sudoku.get_col(hard, 4)
+  let col6 = sudoku.get_col(hard, 5)
+  let col7 = sudoku.get_col(hard, 6)
+  let col8 = sudoku.get_col(hard, 7)
+  let col9 = sudoku.get_col(hard, 8)
+
+  let text =
+    "sudoku:\n"
+    <> sudoku.to_string(hard)
+    <> "\ncol 1: "
+    <> string.join(list.map(iv.to_list(col1), int.to_string), ", ")
+    <> "\ncol 2: "
+    <> string.join(list.map(iv.to_list(col2), int.to_string), ", ")
+    <> "\ncol 3: "
+    <> string.join(list.map(iv.to_list(col3), int.to_string), ", ")
+    <> "\ncol 4: "
+    <> string.join(list.map(iv.to_list(col4), int.to_string), ", ")
+    <> "\ncol 5: "
+    <> string.join(list.map(iv.to_list(col5), int.to_string), ", ")
+    <> "\ncol 6: "
+    <> string.join(list.map(iv.to_list(col6), int.to_string), ", ")
+    <> "\ncol 7: "
+    <> string.join(list.map(iv.to_list(col7), int.to_string), ", ")
+    <> "\ncol 8: "
+    <> string.join(list.map(iv.to_list(col8), int.to_string), ", ")
+    <> "\ncol 9: "
+    <> string.join(list.map(iv.to_list(col9), int.to_string), ", ")
+
+  birdie.snap(
+    text,
+    title: "columns from first hard test are correctly extracted",
+  )
+}
+
 pub fn get_boxes_test() {
   let hard_patterns = patterns.hard()
   let assert Ok(hard) = list.first(hard_patterns)
