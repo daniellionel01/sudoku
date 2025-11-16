@@ -146,3 +146,18 @@ pub fn get_boxes_test() {
 
   birdie.snap(text, title: "boxes from first hard test are correctly extracted")
 }
+
+pub fn correct_sets_test() {
+  assert False == sudoku.correct_set(iv.from_list([]))
+  assert False == sudoku.correct_set(iv.from_list([1, 0, 3, 4, 5, 6, 0, 8, 9]))
+  assert True == sudoku.correct_set(iv.from_list([1, 2, 3, 4, 5, 6, 7, 8, 9]))
+  assert True == sudoku.correct_set(iv.from_list([3, 2, 6, 5, 9, 1, 4, 8, 7]))
+}
+
+pub fn is_solved_test() {
+  let hard_patterns = patterns.hard()
+  let assert Ok(hard) = list.first(hard_patterns)
+  assert False == sudoku.is_solved(hard)
+
+  assert True == sudoku.is_solved(patterns.solved())
+}

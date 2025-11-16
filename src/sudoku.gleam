@@ -10,7 +10,42 @@ pub fn solve(sudoku: Sudoku) -> Result(Sudoku, Nil) {
 }
 
 pub fn is_solved(sudoku: Sudoku) -> Bool {
-  todo
+  let nines = iv.range(0, 8)
+
+  let boxes =
+    nines
+    |> iv.try_map(fn(i) {
+      let box = get_box(sudoku, i)
+      case correct_set(box) {
+        False -> Error(Nil)
+        True -> Ok(True)
+      }
+    })
+  use <- bool.lazy_guard(when: result.is_error(boxes), return: fn() { False })
+
+  let columns =
+    nines
+    |> iv.try_map(fn(i) {
+      let col = get_col(sudoku, i)
+      case correct_set(col) {
+        False -> Error(Nil)
+        True -> Ok(True)
+      }
+    })
+  use <- bool.lazy_guard(when: result.is_error(columns), return: fn() { False })
+
+  let rows =
+    nines
+    |> iv.try_map(fn(i) {
+      let row = get_row(sudoku, i)
+      case correct_set(row) {
+        False -> Error(Nil)
+        True -> Ok(True)
+      }
+    })
+  use <- bool.lazy_guard(when: result.is_error(rows), return: fn() { False })
+
+  True
 }
 
 /// Boxes are counted left to right, top to bottom, starting at 0.
@@ -57,6 +92,15 @@ pub fn get_col(sudoku: Sudoku, col: Int) -> iv.Array(Int) {
     let assert Ok(el) = iv.get(sudoku.cells, col + i * 9)
     el
   })
+}
+
+pub fn correct_set(cells: iv.Array(Int)) -> Bool {
+  let digits =
+    cells
+    |> iv.to_list
+    |> list.unique
+
+  !list.contains(digits, 0) && list.length(digits) == 9
 }
 
 pub opaque type Sudoku {
